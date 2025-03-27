@@ -3,34 +3,50 @@ const mongoose = require('mongoose');
 const PodcastSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: [true, 'Podcast title is required'],
     trim: true
   },
   description: {
     type: String,
-    required: true
+    required: [true, 'Podcast description is required'],
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
+  filename: {
+    type: String,
+    required: [true, 'Filename is required']
+  },
+  filePath: {
+    type: String,
+    required: [true, 'File path is required']
+  },
   audioUrl: {
     type: String,
-    required: true
+    required: [true, 'Audio URL is required']
   },
   category: {
-    type: String,
-    enum: ['Technology', 'Science', 'Business', 'Entertainment', 'Sports'],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
     required: true
   },
-  duration: {
-    type: Number, // in seconds
-    required: true
+  visibility: {
+    type: String,
+    enum: ['public', 'private'],
+    default: 'public'
+  },
+  size: {
+    type: Number,
+    default: 0
   },
   coverImage: {
     type: String,
-    default: 'https://example.com/default-podcast-cover.jpg'
+    default: '/uploads/default/default-cover.jpg'
+  },
+  coverImagePath: {
+    type: String
   },
   tags: [String],
   likes: [{
@@ -40,14 +56,23 @@ const PodcastSchema = new mongoose.Schema({
   comments: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
     },
-    text: String,
+    text: {
+      type: String,
+      required: [true, 'Comment text is required'],
+      trim: true
+    },
     createdAt: {
       type: Date,
       default: Date.now
     }
-  }]
+  }],
+  metadata: {
+    type: Object,
+    default: {}
+  }
 }, {
   timestamps: true
 });

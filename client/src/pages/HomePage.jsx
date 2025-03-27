@@ -12,8 +12,8 @@ const HomePage = () => {
 
     return (
         <div className="home-container">
-            <h1 className="home-title">Chào Mừng Bạn Đến Trang Chủ Website Podcast-Healing</h1>
-            <p className="home-description">Nơi Giúp Bạn Chữa Lành Tâm Hồn Đầy Vụn Vỡ Của Bạn</p>
+            {/* <h1 className="home-title">Chào Mừng Bạn Đến Trang Chủ Website Podcast-Healing</h1>
+            <p className="home-description">Nơi Giúp Bạn Chữa Lành Tâm Hồn Đầy Vụn Vỡ Của Bạn</p> */}
             <ExplorePage />
         </div>
     );

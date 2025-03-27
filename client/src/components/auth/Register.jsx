@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaUser, FaLock, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../../services/authService";
+import { AuthContext } from "../../context/AuthContext";
 import "../../styles/Register.css";
 
 const Register = () => {
@@ -8,17 +10,30 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    phone: "",
-    address: "",
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    console.log("User registered:", formData);
+    setLoading(true);
+    setError("");
+    try {
+      const response = await authService.register(formData);
+      setUser(response.user);
+      navigate("/login");
+    } catch (err) {
+      setError(err.message || "Registration failed. Please try again.");
+      console.error("Registration error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,29 +77,6 @@ const Register = () => {
             onChange={handleChange}
           />
         </div>
-
-        <div className="input-group">
-          <FaPhone className="icon" />
-          <input
-            type="text"
-            name="phone"
-            placeholder="Số điện thoại"
-            required
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="input-group">
-          <FaMapMarkerAlt className="icon" />
-          <input
-            type="text"
-            name="address"
-            placeholder="Địa chỉ"
-            required
-            onChange={handleChange}
-          />
-        </div>
-
         <button type="submit" className="register-btn">Đăng Ký</button>
 
         <p className="login-link">
